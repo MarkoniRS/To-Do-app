@@ -1,20 +1,30 @@
 import functions
 import PySimpleGUI as sg
 import time
+import os
+
+if not os.path.exists("todos.txt"):
+    with open("todos.txt", "w") as file:
+        pass
 
 sg.theme("GreenMono")
 
 clock = sg.Text('', key="clock")
 label = sg.Text("Type in a To-Do")
 input_box = sg.Input(tooltip="Enter To-Do", key="todo")
-add_button = sg.Button("Add")
-
+add_button = sg.Button("Add",
+                       tooltip="Add To-Do",
+                       size=10,
+                       mouseover_colors="LightBlue2")
 list_box = sg.Listbox(values=functions.get_todos(),
                       key='todos',
                       enable_events=True,
                       size=[45, 10])
-edit_button = sg.Button("Edit")
-complete_button = sg.Button("Complete")
+edit_button = sg.Button("Edit", tooltip="Edit To-Do")
+complete_button = sg.Button("Complete",
+                            tooltip="Complete To-Do",
+                            size=10,
+                            mouseover_colors="LightBlue2")
 exit_button = sg.Button("Exit")
 
 window = sg.Window('My To-Do App',
@@ -56,7 +66,7 @@ while True:
                 todos = functions.get_todos()
                 todos.remove(todo_to_complete)
                 functions.write_todos(todos)
-                window['todos'].update(value=todos)
+                window['todos'].update(values=todos)
                 window['todo'].update(value='')
             except IndexError:
                 sg.popup("Please select an item first", font=("Helvetica", 12))
@@ -71,12 +81,3 @@ while True:
             break
 
 window.close()
-
-
-
-
-
-
-
-
-
